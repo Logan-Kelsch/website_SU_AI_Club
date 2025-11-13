@@ -187,3 +187,145 @@ hr.sep {
   border-top: 1px solid var(--border);
   margin: 1rem 0;
 }
+
+/* ===== Dashboard: user info bar ===== */
+.userbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.userbar-left {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+}
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: #0b0f14;
+  font-weight: 800;
+  letter-spacing: .5px;
+  box-shadow: 0 6px 24px color-mix(in oklab, var(--accent) 32%, transparent);
+}
+.stat-list {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+}
+.stat-list .stat {
+  background: color-mix(in oklab, var(--card) 96%, var(--accent) 4%);
+  border: 1px solid var(--border);
+  padding: .4rem .6rem;
+  border-radius: .6rem;
+}
+.accent-dot {
+  display: inline-block;
+  width: 16px; height: 16px; border-radius: 999px;
+  background: var(--accent);
+  border: 1px solid color-mix(in oklab, var(--accent) 60%, black);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 15%, transparent);
+}
+
+/* ===== Category cards with color + surrounding stock image ===== */
+.category-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(60% 50% at 0% 0%, color-mix(in oklab, var(--tone) 18%, transparent) 0%, transparent 70%),
+    radial-gradient(50% 60% at 100% 100%, color-mix(in oklab, var(--tone) 14%, transparent) 0%, transparent 70%),
+    linear-gradient(0deg, color-mix(in oklab, var(--card) 92%, var(--tone) 8%), color-mix(in oklab, var(--card) 92%, var(--tone) 8%));
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  min-height: 240px;
+}
+.category-card .content {
+  position: relative;
+  z-index: 2;
+  max-width: 520px;
+}
+.category-figure {
+  position: absolute;
+  right: .75rem;
+  bottom: -8px;
+  width: min(42%, 360px);
+  transform: rotate(-1.8deg);
+  z-index: 1;
+  filter: saturate(0.92) contrast(1.02);
+}
+.category-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: .9rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 38px rgba(0,0,0,0.18);
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.06));
+}
+.category-bubbles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.category-bubbles span {
+  position: absolute;
+  width: 90px; height: 90px;
+  border-radius: 60px;
+  background: color-mix(in oklab, var(--tone) 22%, transparent);
+  filter: blur(8px);
+  opacity: .6;
+}
+@media (max-width: 900px) {
+  .category-figure { position: relative; width: 100%; right: auto; bottom: auto; transform: none; margin-top: .8rem; }
+  .category-card { padding-bottom: 1.1rem; }
+}
+
+
+/* ===== LLM chat UI ===== */
+.banner {
+  border: 1px dashed var(--border);
+  background: color-mix(in oklab, var(--card) 94%, var(--accent) 6%);
+  padding: .6rem .8rem;
+  border-radius: .6rem;
+  margin-bottom: .8rem;
+  font-size: .92rem;
+}
+
+.chat {
+  display: grid;
+  gap: .6rem;
+  padding: .8rem;
+}
+.chat-form textarea {
+  width: 100%;
+  padding: .7rem .9rem;
+  border: 1px solid var(--border);
+  border-radius: .75rem;
+  background: var(--card);
+  color: var(--text);
+  resize: vertical;
+}
+
+.bubble {
+  max-width: 80%;
+  padding: .65rem .8rem;
+  border-radius: .75rem;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card) 96%, var(--accent) 4%);
+  white-space: pre-wrap;
+}
+.bubble.user {
+  margin-left: auto;
+  background: var(--accent);
+  color: #0b0f14;
+  border-color: color-mix(in oklab, var(--accent) 60%, black);
+}
+.bubble.assistant {
+  margin-right: auto;
+}
