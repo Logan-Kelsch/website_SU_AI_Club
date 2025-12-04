@@ -5,7 +5,7 @@ import UserInfo from '../components/UserInfo.jsx'
 import { useLLM } from '../llm/LLMContext.jsx'
 
 export default function Dashboard() {
-  const { testMode, setTestMode } = useLLM()
+  const { mode } = useLLM()
 
   return (
     <div>
@@ -16,26 +16,19 @@ export default function Dashboard() {
         <div className="card" style={{ marginTop: '1rem' }}>
           <h3 style={{ margin: 0 }}>LLM Tool</h3>
           <p className="subtitle" style={{ marginTop: '.35rem' }}>
-            Toggle <b>Test Mode</b> to send messages with <i>no model response</i>. Turn it off for a simulated reply (replaceable with your API).
+            The chat interface uses <b>{mode}</b> mode: responses pull a short summary from Wikipedia’s public API.
           </p>
-          <label style={{ display: 'inline-flex', alignItems: 'center', gap: '.6rem', marginTop: '.6rem' }}>
-            <input
-              type="checkbox"
-              checked={testMode}
-              onChange={(e) => setTestMode(e.target.checked)}
-            />
-            <span>Enable Test Mode (no replies)</span>
-          </label>
+          <p className="subtitle">
+            You can later swap in your own back-end or model by editing <code>src/llm/client.js</code>.
+          </p>
         </div>
 
         <h1 style={{ marginTop: '1.25rem' }}>Dashboard</h1>
-        <p className="subtitle">
-          Choose a category. Each includes subtopics that open a chat interface.
-        </p>
+        <p className="subtitle">Choose a category. Each includes subtopics that open a chat interface.</p>
         <CategoryGrid />
       </div>
       <footer className="footer">
-        <div className="container">Extend pages in <code>src/pages</code> and wire APIs in <code>src/llm/client.js</code>.</div>
+        <div className="container">Wire your real model/search in <code>src/llm/client.js</code>.</div>
       </footer>
     </div>
   )

@@ -1,15 +1,10 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 
 const LLMContext = createContext(null)
+export const LLM_MODES = { WEB: 'web' } // single mode now
 
 export function LLMProvider({ children }) {
-  const [testMode, setTestMode] = useState(() => localStorage.getItem('llm_test_mode') === 'true')
-
-  useEffect(() => {
-    localStorage.setItem('llm_test_mode', String(testMode))
-  }, [testMode])
-
-  const value = useMemo(() => ({ testMode, setTestMode }), [testMode])
+  const value = useMemo(() => ({ mode: LLM_MODES.WEB }), [])
   return <LLMContext.Provider value={value}>{children}</LLMContext.Provider>
 }
 

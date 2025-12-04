@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import { useLLM } from '../llm/LLMContext.jsx'
-import { sendToLLM } from '../llm/Client.jsx'
+import { sendToLLM } from '../llm/client.jsx'
 
 function pretty(label) {
   return label.split('-').map(s => s[0]?.toUpperCase() + s.slice(1)).join(' ')
@@ -10,7 +10,7 @@ function pretty(label) {
 
 export default function LLMChat() {
   const { category, topic } = useParams()
-  const { testMode } = useLLM()
+  const { mode } = useLLM()
   const [messages, setMessages] = useState([])
   const [text, setText] = useState('')
   const scrollRef = useRef(null)
@@ -24,19 +24,20 @@ export default function LLMChat() {
     setText('')
 
     const newUser = { role: 'user', content }
-    setMessages(prev => [...prev, newUser])
+    const history = [...messages, newUser]
+    setMessages(history)
 
-    const reply = await sendToLLM({ text: content, category, topic, testMode })
-    if (!reply) {
-      // test mode: do not append assistant message
-      return
+    try {
+      const reply = await sendToLLM({ category, topic, messages: history })
+      setMessages(prev => [...prev, reply])
+    } catch (err) {
+      // Surface the error visibly in the chat
+      setMessages(prev => [...prev, { role: 'assistant', content: `⛔ LLM error: ${String(err.message || err)}` }])
+    } finally {
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
+      }, 0)
     }
-    setMessages(prev => [...prev, reply])
-
-    // auto-scroll
-    setTimeout(() => {
-      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
-    }, 0)
   }
 
   return (
@@ -46,11 +47,7 @@ export default function LLMChat() {
         <span className="badge" style={{ marginBottom: '.6rem', display: 'inline-block' }}>{pretty(category)}</span>
         <h1 style={{ marginTop: 0 }}>{title}</h1>
 
-        {testMode && (
-          <div className="banner">
-            Test Mode is ON — messages are sent but no assistant replies are shown.
-          </div>
-        )}
+        <div className="banner">Current LLM mode: <b>{mode} (Gemini)</b></div>
 
         <div className="chat card" ref={scrollRef} style={{ maxHeight: 420, overflow: 'auto' }}>
           {messages.length === 0 ? (
